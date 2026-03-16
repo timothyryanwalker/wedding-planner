@@ -5,10 +5,8 @@
  */
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Dashboard from './pages/Dashboard'
+import Tasks     from './pages/Tasks'
 import NavBar    from './components/NavBar'
-
-/* Placeholder components for future pages */
-const Tasks   = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Tasks — coming soon</p>
 const Vendors = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Vendors — coming soon</p>
 const Budget  = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Budget — coming soon</p>
 const Goals   = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Goals — coming soon</p>
