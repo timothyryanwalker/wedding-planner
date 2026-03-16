@@ -1,31 +1,28 @@
-/* Google Fonts — Playfair Display for headings, Jost for body */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Jost:wght@300;400;500&display=swap');
-
 /* ─── Design Tokens ──────────────────────────────────────────────────────── */
 :root {
   /* Palette */
-  --ivory:        #faf7f2;
-  --ivory-dark:   #f0ebe1;
-  --rose:         #c9a0a0;
-  --rose-light:   #f0dede;
-  --rose-dark:    #a07070;
-  --sage:         #8a9e8a;
-  --sage-light:   #d6e4d6;
-  --sage-dark:    #5f7a5f;
-  --gold:         #c8a96e;
-  --gold-light:   #ede0c4;
-  --gold-dark:    #9e7d45;
+  --ivory:        #fdf9f0;
+  --ivory-dark:   #f9e8dc;
+  --rose:         #7d0a2e;
+  --rose-light:   #f0896a;
+  --rose-dark:    #300e0f;
+  --sage:         #6fa898;
+  --sage-light:   #cdddd4;
+  --sage-dark:    #3d6b5e;
+  --gold:         #8a7d10;
+  --gold-light:   #a89e1a;
+  --gold-dark:    #5c5200;
 
   /* Neutrals */
-  --text:         #5a4e4e;
-  --text-muted:   #9a8c8c;
-  --text-heading: #2e2020;
+  --text:         #4a3030;
+  --text-muted:   #8a7070;
+  --text-heading: #300e0f;
   --border:       #e8ddd5;
   --shadow:       rgba(90, 60, 40, 0.08) 0 4px 16px, rgba(90, 60, 40, 0.04) 0 1px 4px;
 
-  /* Fonts */
-  --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body:    'Jost', system-ui, sans-serif;
+  /* Fonts — Helvetica Neue is a system font, no import needed */
+  --font-heading: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-body:    'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   /* Base */
   font-family: var(--font-body);
