@@ -67,8 +67,9 @@ function isOverdue(task) {
 }
 
 function Tasks() {
-  const [tasks,   setTasks]   = useState(SAMPLE_TASKS)
-  const [filters, setFilters] = useState({ status: 'all', owner: 'all', sort: 'dueDate' })
+  const [tasks,      setTasks]      = useState(SAMPLE_TASKS)
+  const [filters,    setFilters]    = useState({ status: 'all', owner: 'all', sort: 'dueDate' })
+  const [expandedId, setExpandedId] = useState(null)
 
   function handleToggle(id) {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))
@@ -76,6 +77,44 @@ function Tasks() {
 
   function handleFilterChange(key, value) {
     setFilters(prev => ({ ...prev, [key]: value }))
+  }
+
+  function handleExpand(id) {
+    if (expandedId === id) {
+      setExpandedId(null)
+      return
+    }
+    /* Discard any unsaved new task if expanding a different row */
+    if (expandedId < 0) setTasks(prev => prev.filter(t => t.id !== expandedId))
+    setExpandedId(id)
+  }
+
+  function handleSave(updatedTask) {
+    if (updatedTask.id < 0) {
+      const newTask = { ...updatedTask, id: Date.now(), completed: false }
+      setTasks(prev => [...prev.filter(t => t.id !== updatedTask.id), newTask])
+    } else {
+      setTasks(prev => prev.map(t => t.id === updatedTask.id ? updatedTask : t))
+    }
+    setExpandedId(null)
+  }
+
+  function handleDelete(id) {
+    setTasks(prev => prev.filter(t => t.id !== id))
+    setExpandedId(null)
+  }
+
+  function handleCancel() {
+    if (expandedId < 0) setTasks(prev => prev.filter(t => t.id !== expandedId))
+    setExpandedId(null)
+  }
+
+  function handleAddTask() {
+    if (expandedId < 0) return
+    const tempId = -Date.now()
+    const newTask = { id: tempId, title: '', completed: false, dueDate: '', owner: 'Both', category: 'Admin', priority: 'Medium' }
+    setTasks(prev => [newTask, ...prev])
+    setExpandedId(tempId)
   }
 
   const completed = tasks.filter(t => t.completed).length
@@ -151,6 +190,29 @@ function Tasks() {
           color: var(--text-muted);
           background: var(--ivory);
         }
+
+        .tasks-page__toolbar {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 1rem;
+        }
+
+        .tasks-page__add-btn {
+          font-family: var(--font-body);
+          font-size: 0.85rem;
+          font-weight: 500;
+          padding: 0.4rem 1.1rem;
+          border-radius: 999px;
+          border: none;
+          background: var(--rose);
+          color: var(--ivory);
+          cursor: pointer;
+          transition: background 0.15s ease;
+        }
+
+        .tasks-page__add-btn:hover {
+          background: var(--rose-dark);
+        }
       `}</style>
 
       <div className="tasks-page">
@@ -159,11 +221,24 @@ function Tasks() {
           <p className="tasks-page__summary">{completed} of {total} complete</p>
         </header>
 
+        <div className="tasks-page__toolbar">
+          <button className="tasks-page__add-btn" onClick={handleAddTask}>+ Add Task</button>
+        </div>
+
         <div className="tasks-page__list">
           <TaskFilter filters={filters} onChange={handleFilterChange} />
           {filtered.length > 0
             ? filtered.map(task => (
-                <TaskCard key={task.id} task={task} onToggle={handleToggle} />
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onToggle={handleToggle}
+                  isExpanded={expandedId === task.id}
+                  onExpand={handleExpand}
+                  onSave={handleSave}
+                  onDelete={handleDelete}
+                  onCancel={handleCancel}
+                />
               ))
             : <p className="tasks-page__empty">No tasks match the current filters.</p>
           }
