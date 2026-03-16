@@ -1,6 +1,6 @@
 /**
  * TaskFilter — pure presentational filter bar for the Tasks page.
- * Renders two groups of pill toggles: Status and Owner.
+ * Renders three groups of pill toggles: Status, Owner, and Sort.
  * Receives `filters` (current values) and `onChange(key, value)` as props.
  * No internal state — all filter logic lives in Tasks.jsx.
  */
@@ -17,6 +17,13 @@ const OWNER_OPTIONS = [
   { value: 'Taylor',  label: 'Taylor'  },
   { value: 'Timothy', label: 'Timothy' },
   { value: 'Both',    label: 'Both'    },
+]
+
+const SORT_OPTIONS = [
+  { value: 'dueDate',  label: 'Due Date'  },
+  { value: 'priority', label: 'Priority'  },
+  { value: 'owner',    label: 'Owner'     },
+  { value: 'category', label: 'Category'  },
 ]
 
 const OWNER_ACTIVE_STYLES = {
@@ -113,6 +120,19 @@ function TaskFilter({ filters, onChange }) {
               </button>
             )
           })}
+        </div>
+
+        <div className="task-filter__group">
+          <span className="task-filter__label">Sort</span>
+          {SORT_OPTIONS.map(opt => (
+            <button
+              key={opt.value}
+              className={`task-filter__pill${filters.sort === opt.value ? ' task-filter__pill--active-status' : ''}`}
+              onClick={() => onChange('sort', opt.value)}
+            >
+              {opt.label}
+            </button>
+          ))}
         </div>
       </div>
     </>

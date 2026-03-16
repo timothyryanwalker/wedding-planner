@@ -68,7 +68,7 @@ function isOverdue(task) {
 
 function Tasks() {
   const [tasks,   setTasks]   = useState(SAMPLE_TASKS)
-  const [filters, setFilters] = useState({ status: 'all', owner: 'all' })
+  const [filters, setFilters] = useState({ status: 'all', owner: 'all', sort: 'dueDate' })
 
   function handleToggle(id) {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))
@@ -94,6 +94,17 @@ function Tasks() {
     })
     .sort((a, b) => {
       if (a.completed !== b.completed) return a.completed ? 1 : -1
+      if (filters.sort === 'owner') {
+        const order = { Taylor: 0, Timothy: 1, Both: 2 }
+        return (order[a.owner] ?? 3) - (order[b.owner] ?? 3)
+      }
+      if (filters.sort === 'category') {
+        return a.category.localeCompare(b.category)
+      }
+      if (filters.sort === 'priority') {
+        const order = { High: 0, Medium: 1, Low: 2 }
+        return (order[a.priority] ?? 3) - (order[b.priority] ?? 3)
+      }
       return new Date(a.dueDate) - new Date(b.dueDate)
     })
 

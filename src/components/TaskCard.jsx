@@ -11,6 +11,12 @@ const OWNER_STYLES = {
   Both:     { background: 'var(--gold)',  color: 'var(--ivory)' },
 }
 
+const PRIORITY_BORDER = {
+  High:   '#d94f35',
+  Medium: 'var(--gold)',
+  Low:    'var(--sage)',
+}
+
 function TaskCard({ task, onToggle }) {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
@@ -121,7 +127,12 @@ function TaskCard({ task, onToggle }) {
         }
       `}</style>
 
-      <div className={`task-card${task.completed ? ' task-card--done' : ''}`}>
+      <div
+        className={`task-card${task.completed ? ' task-card--done' : ''}`}
+        style={{
+          borderLeft: `4px solid ${PRIORITY_BORDER[task.priority] ?? 'var(--border)'}`,
+        }}
+      >
         <input
           type="checkbox"
           className="task-card__checkbox"
