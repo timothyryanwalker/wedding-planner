@@ -3,12 +3,17 @@
  * Assembles all four widgets: WeddingCountdown, TaskSummary, BudgetSnapshot, GoalProgress.
  * Uses a 2-column CSS grid; countdown and goals span full width, tasks and budget sit side-by-side.
  */
-import WeddingCountdown from '../components/WeddingCountdown'
 import TaskSummary      from '../components/TaskSummary'
 import BudgetSnapshot   from '../components/BudgetSnapshot'
 import GoalProgress     from '../components/GoalProgress'
 
 function Dashboard() {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+  const target = new Date('2027-05-30')
+  target.setHours(0, 0, 0, 0)
+  const daysLeft = Math.round((target - today) / (1000 * 60 * 60 * 24))
+
   return (
     <>
       <style>{`
@@ -33,10 +38,19 @@ function Dashboard() {
 
         .dashboard__subtitle {
           font-family: var(--font-body);
-          font-size: 0.95rem;
+          font-size: 1.1rem;
           font-weight: 300;
-          color: var(--text-muted);
+          color: var(--text);
           letter-spacing: 0.06em;
+        }
+
+        .dashboard__days {
+          font-family: var(--font-body);
+          font-size: 1rem;
+          font-weight: 400;
+          color: var(--rose);
+          margin-top: 0.4rem;
+          letter-spacing: 0.04em;
         }
 
         .dashboard__grid {
@@ -45,8 +59,7 @@ function Dashboard() {
           gap: 1.25rem;
         }
 
-        .dashboard__grid > *:first-child,
-        .dashboard__grid > *:last-child {
+        .dashboard__full {
           grid-column: 1 / -1;
         }
 
@@ -55,8 +68,7 @@ function Dashboard() {
             grid-template-columns: 1fr;
           }
 
-          .dashboard__grid > *:first-child,
-          .dashboard__grid > *:last-child {
+          .dashboard__full {
             grid-column: unset;
           }
         }
@@ -66,13 +78,13 @@ function Dashboard() {
         <header className="dashboard__header">
           <h1 className="dashboard__title">Your Wedding</h1>
           <p className="dashboard__subtitle">Taylor &amp; Timothy &nbsp;·&nbsp; May 30, 2027</p>
+          <p className="dashboard__days">{daysLeft} days to go</p>
         </header>
 
         <div className="dashboard__grid">
-          <WeddingCountdown />
           <TaskSummary />
           <BudgetSnapshot />
-          <GoalProgress />
+          <div className="dashboard__full"><GoalProgress /></div>
         </div>
       </div>
     </>
