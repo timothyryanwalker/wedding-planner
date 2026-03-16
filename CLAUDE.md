@@ -3,7 +3,6 @@
 ## What this is
 A wedding planning app for tracking tasks, vendors, budget, and goals.
 Built web-first (React + Vite), with iOS (Expo) planned for the future.
-Currently in Phase 1 — building Dashboard + Tasks.
 
 ## Stack
 - Frontend: React (Vite)
@@ -12,9 +11,17 @@ Currently in Phase 1 — building Dashboard + Tasks.
 - Hosting: Netlify (planned)
 
 ## Aesthetic
-Soft romance: warm ivory, dusty rose, sage green, champagne gold.
-Fonts: Playfair Display (headings) + Jost (body) via Google Fonts.
-Thin-line icons. Gentle fade animations. Never flat white backgrounds.
+Warm romance palette. Thin-line icons. Gentle fade animations. Never flat white backgrounds.
+
+**Font:** Helvetica Neue (system font — no Google Fonts import)
+
+**Palette:**
+- `#300e0f` — dark brown-burgundy (headings)
+- `#7d0a2e` — burgundy (primary accent)
+- `#8a7d10` / `#a89e1a` — olive (secondary accent)
+- `#6fa898` / `#cdddd4` — sage teal (success/progress)
+- `#d94f35` / `#f0896a` — terracotta / coral (warm accents, overdue)
+- `#f9e8dc` / `#fdf9f0` — blush / ivory (backgrounds)
 
 ## Design rules
 - Use CSS custom properties for all colors and tokens
@@ -24,6 +31,8 @@ Thin-line icons. Gentle fade animations. Never flat white backgrounds.
 ## Data model
 Tables in Supabase: users, tasks, vendors, goals, budget_items, guests
 
+**tasks** fields include: id, title, completed, dueDate, owner (Taylor/Timothy/Both), category, priority (High/Medium/Low)
+
 ## Code rules
 - Explain what you're going to do before making any changes
 - One file at a time, one feature at a time
@@ -32,5 +41,12 @@ Tables in Supabase: users, tasks, vendors, goals, budget_items, guests
 - Never make changes to more than one file at a time without approval
 - When I paste code or errors, diagnose before fixing
 
-## Current focus
-Building Dashboard + Tasks first.
+## What's been built
+- **NavBar** — fixed top nav, all six routes, active link highlighting
+- **Dashboard** — page header with days-to-go countdown, TaskSummary, BudgetSnapshot, GoalProgress widgets
+- **Tasks page** — full task list with inline add/edit/delete, filter by status/owner, sort by due date/priority/owner/category, priority color borders, owner badges, overdue highlighting
+- **Routing** — react-router-dom wired in App.jsx; placeholder pages for Vendors, Budget, Goals, Guests
+
+## Current phase
+Dashboard and Tasks are complete with hardcoded local state.
+Next step: Supabase auth, then wire real data to replace sample data.
