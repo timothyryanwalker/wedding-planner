@@ -147,19 +147,40 @@ function Vendors() {
         .vendors-page {
           max-width: 900px;
           margin: 0 auto;
-          padding: 2.5rem 1.5rem 4rem;
+          padding: 3rem 1.5rem 5rem;
         }
 
         .vendors-page__header {
-          margin-bottom: 1.5rem;
+          margin-bottom: 0.75rem;
         }
 
         .vendors-page__title {
-          font-family: var(--font-heading);
+          font-family: var(--font-display);
+          font-style: italic;
           font-size: 2.5rem;
-          font-weight: 500;
+          font-weight: 400;
           color: var(--text-heading);
           margin-bottom: 0.25rem;
+        }
+
+        .dash-divider {
+          display: flex;
+          align-items: center;
+          gap: 0.85rem;
+          margin: 1.25rem 0;
+        }
+
+        .dash-divider__line {
+          flex: 1;
+          height: 1px;
+          background: var(--border);
+        }
+
+        .dash-divider__diamond {
+          font-size: 0.65rem;
+          color: var(--decorative-color);
+          line-height: 1;
+          user-select: none;
         }
 
         .vendors-page__summary {
@@ -209,13 +230,14 @@ function Vendors() {
         }
 
         .vf-dropdown__btn--active {
-          background: var(--rose);
-          color: var(--ivory);
+          background: transparent;
+          color: var(--rose);
           border-color: var(--rose);
         }
 
         .vf-dropdown__btn--active:hover {
-          background: var(--rose-dark);
+          background: var(--ivory-dark);
+          color: var(--rose-dark);
           border-color: var(--rose-dark);
         }
 
@@ -231,7 +253,7 @@ function Vendors() {
           z-index: 50;
           background: var(--ivory);
           border: 1px solid var(--border);
-          border-radius: 10px;
+          border-radius: 12px;
           box-shadow: 0 6px 20px rgba(48, 14, 15, 0.12);
           min-width: 160px;
           overflow: hidden;
@@ -310,6 +332,12 @@ function Vendors() {
             {vendors.length} vendor{vendors.length !== 1 ? 's' : ''} · {fmtCurrency(totalBudget)} total
           </p>
         </header>
+
+        <div className="dash-divider">
+          <span className="dash-divider__line" />
+          <span className="dash-divider__diamond">◇</span>
+          <span className="dash-divider__line" />
+        </div>
 
         <div className="vendors-page__toolbar">
           <div className="vf-wrap" ref={filtersRef}>

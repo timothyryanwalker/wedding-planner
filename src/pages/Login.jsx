@@ -19,7 +19,7 @@ function Login() {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: var(--ivory);
+          background: transparent;
           padding: 2rem;
         }
 
@@ -29,7 +29,7 @@ function Login() {
           background: var(--ivory-dark);
           border: 1px solid var(--border);
           border-radius: 16px;
-          box-shadow: var(--shadow);
+          box-shadow: var(--shadow-lifted);
           padding: 3rem 2.5rem;
           display: flex;
           flex-direction: column;
@@ -39,28 +39,51 @@ function Login() {
         }
 
         .login-card__wordmark {
-          font-family: var(--font-heading);
+          font-family: var(--font-display);
+          font-style: italic;
           font-size: 2.25rem;
-          font-weight: 600;
-          color: var(--text-heading);
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          margin-bottom: 0.25rem;
+          font-weight: 500;
+          color: var(--rose-dark);
+          letter-spacing: 0.01em;
+          margin-bottom: 0.5rem;
         }
 
         .login-card__subtitle {
-          font-family: var(--font-body);
-          font-size: 1rem;
-          font-weight: 300;
-          color: var(--text);
+          font-family: var(--font-display);
+          font-style: italic;
+          font-size: 1.6rem;
+          font-weight: 400;
+          color: var(--text-heading);
         }
 
         .login-card__date {
           font-family: var(--font-body);
-          font-size: 0.85rem;
-          font-weight: 300;
+          font-size: 0.72rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.14em;
           color: var(--text-muted);
-          margin-bottom: 1.5rem;
+        }
+
+        .dash-divider {
+          display: flex;
+          align-items: center;
+          gap: 0.85rem;
+          margin: 1.25rem 0;
+          width: 100%;
+        }
+
+        .dash-divider__line {
+          flex: 1;
+          height: 1px;
+          background: var(--border);
+        }
+
+        .dash-divider__diamond {
+          font-size: 0.65rem;
+          color: var(--decorative-color);
+          line-height: 1;
+          user-select: none;
         }
 
         .login-card__btn {
@@ -87,6 +110,11 @@ function Login() {
           <div className="login-card__wordmark">Lapel</div>
           <p className="login-card__subtitle">Taylor &amp; Timothy</p>
           <p className="login-card__date">May 30, 2027</p>
+          <div className="dash-divider">
+            <span className="dash-divider__line" />
+            <span className="dash-divider__diamond">◇</span>
+            <span className="dash-divider__line" />
+          </div>
           <button className="login-card__btn" onClick={signInWithGoogle}>
             Sign in with Google
           </button>

@@ -76,19 +76,40 @@ function Budget() {
         .budget-page {
           max-width: 1000px;
           margin: 0 auto;
-          padding: 2.5rem 1.5rem 4rem;
+          padding: 3rem 1.5rem 5rem;
         }
 
         .budget-page__header {
-          margin-bottom: 1.75rem;
+          margin-bottom: 0.75rem;
         }
 
         .budget-page__title {
-          font-family: var(--font-heading);
+          font-family: var(--font-display);
+          font-style: italic;
           font-size: 2.5rem;
-          font-weight: 500;
+          font-weight: 400;
           color: var(--text-heading);
           margin-bottom: 0.25rem;
+        }
+
+        .dash-divider {
+          display: flex;
+          align-items: center;
+          gap: 0.85rem;
+          margin: 1.25rem 0;
+        }
+
+        .dash-divider__line {
+          flex: 1;
+          height: 1px;
+          background: var(--border);
+        }
+
+        .dash-divider__diamond {
+          font-size: 0.65rem;
+          color: var(--decorative-color);
+          line-height: 1;
+          user-select: none;
         }
 
         .budget-page__summary {
@@ -108,9 +129,9 @@ function Budget() {
         .budget-card {
           background: var(--ivory);
           border: 1px solid var(--border);
-          border-radius: 12px;
+          border-radius: 16px;
           padding: 1.1rem 1.25rem;
-          box-shadow: var(--shadow);
+          box-shadow: var(--shadow-lifted);
         }
 
         .budget-card__label {
@@ -166,9 +187,9 @@ function Budget() {
         .budget-list {
           background: var(--ivory);
           border: 1px solid var(--border);
-          border-radius: 14px;
+          border-radius: 16px;
           overflow: hidden;
-          box-shadow: var(--shadow);
+          box-shadow: var(--shadow-lifted);
         }
 
         .budget-row {
@@ -262,6 +283,12 @@ function Budget() {
             {fmtUSD(totalSpent, 0)} of {fmtUSD(TOTAL_BUDGET, 0)} spent
           </p>
         </header>
+
+        <div className="dash-divider">
+          <span className="dash-divider__line" />
+          <span className="dash-divider__diamond">◇</span>
+          <span className="dash-divider__line" />
+        </div>
 
         <div className="budget-page__cards">
           <div className="budget-card">

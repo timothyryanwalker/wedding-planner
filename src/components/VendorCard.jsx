@@ -5,6 +5,7 @@
  * vendor shape: { id, name, category, status, contactName, contactEmail,
  *   contactPhone, instagram, website, notes,
  *   payments: [{ id, label, amount, dueDate, paid }] }
+ * Cards use uniform border, lifted shadow, and 16px radius.
  */
 
 const STATUS_STYLES = {
@@ -55,9 +56,8 @@ function VendorCard({ vendor, onEdit }) {
         .vendor-card {
           background: var(--ivory);
           border: 1px solid var(--border);
-          border-left: 4px solid var(--rose);
-          border-radius: 12px;
-          box-shadow: var(--shadow);
+          border-radius: 16px;
+          box-shadow: var(--shadow-lifted);
           padding: 1.1rem 1.2rem;
           cursor: pointer;
           display: flex;

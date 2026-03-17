@@ -27,10 +27,10 @@ const SORT_OPTIONS = [
 ]
 
 const OWNER_ACTIVE_STYLES = {
-  all:     { background: 'var(--text-heading)', color: 'var(--ivory)' },
-  Taylor:  { background: 'var(--rose)',         color: 'var(--ivory)' },
-  Timothy: { background: 'var(--sage)',         color: 'var(--ivory)' },
-  Both:    { background: 'var(--gold)',         color: 'var(--ivory)' },
+  all:     { background: 'transparent', color: 'var(--rose)',      borderColor: 'var(--rose)'  },
+  Taylor:  { background: 'transparent', color: 'var(--rose)',      borderColor: 'var(--rose)'  },
+  Timothy: { background: 'transparent', color: 'var(--sage-dark)', borderColor: 'var(--sage)'  },
+  Both:    { background: 'transparent', color: 'var(--gold)',      borderColor: 'var(--gold)'  },
 }
 
 function TaskFilter({ filters, onChange }) {
@@ -81,8 +81,8 @@ function TaskFilter({ filters, onChange }) {
         }
 
         .task-filter__pill--active-status {
-          background: var(--rose);
-          color: var(--ivory);
+          background: transparent;
+          color: var(--rose);
           border-color: var(--rose);
         }
       `}</style>
@@ -110,10 +110,7 @@ function TaskFilter({ filters, onChange }) {
               <button
                 key={opt.value}
                 className="task-filter__pill"
-                style={isActive
-                  ? { ...activeStyle, borderColor: activeStyle.background }
-                  : {}
-                }
+                style={isActive ? activeStyle : {}}
                 onClick={() => onChange('owner', opt.value)}
               >
                 {opt.label}
