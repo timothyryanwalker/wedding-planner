@@ -1,6 +1,6 @@
 /**
  * Budget — budget tracking page.
- * Shows 4 summary cards, a progress bar, and a full sorted payment list.
+ * Shows 4 summary cards, a progress bar, and a payment list grouped by category.
  * Display-only for Phase 1 — CRUD to be added after layout approval.
  */
 
@@ -22,17 +22,10 @@ const SAMPLE_BUDGET_ITEMS = [
   { id: 13, item: 'Font Purchase',                  cost: 150,     status: 'Paid',   who: 'Taylor',  how: 'Credit Card', dueDate: '',           datePaid: '',           category: 'Stationery',    notes: '' },
 ]
 
-const CATEGORY_STYLES = {
-  'Venue':          { background: 'var(--rose)',        color: 'var(--ivory)'    },
-  'Florals':        { background: 'var(--sage)',        color: 'var(--ivory)'    },
-  'Hair & Makeup':  { background: 'var(--ivory-dark)',  color: 'var(--rose-dark)'},
-  'Attire':         { background: 'var(--gold)',        color: 'var(--ivory)'    },
-  'Stationery':     { background: 'var(--sage-light)',  color: 'var(--sage-dark)'},
-  'Photography':    { background: 'var(--gold-light)',  color: 'var(--ivory)'    },
-  'Entertainment':  { background: 'var(--sage-dark)',   color: 'var(--ivory)'    },
-  'Transportation': { background: 'var(--border)',      color: 'var(--text-muted)'},
-  'Misc':           { background: 'var(--border)',      color: 'var(--text-muted)'},
-}
+const CATEGORY_ORDER = [
+  'Attire', 'Entertainment', 'Florals', 'Hair & Makeup',
+  'Misc', 'Stationery', 'Transportation', 'Venue',
+]
 
 const WHO_STYLES = {
   'Taylor':  { background: 'var(--rose)', color: 'var(--ivory)' },
@@ -54,6 +47,16 @@ const fmtDate = iso => {
   return new Date(y, m - 1, d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
+function sortGroupItems(items) {
+  return [...items].sort((a, b) => {
+    if (a.status !== b.status) return a.status === 'Paid' ? 1 : -1
+    if (!a.dueDate && !b.dueDate) return 0
+    if (!a.dueDate) return 1
+    if (!b.dueDate) return -1
+    return new Date(a.dueDate) - new Date(b.dueDate)
+  })
+}
+
 function Budget() {
   const items = SAMPLE_BUDGET_ITEMS
 
@@ -61,14 +64,6 @@ function Budget() {
   const totalUnpaid = items.filter(i => i.status === 'Unpaid').reduce((sum, i) => sum + i.cost, 0)
   const remaining   = TOTAL_BUDGET - totalSpent
   const progressPct = Math.min((totalSpent / TOTAL_BUDGET) * 100, 100)
-
-  const sorted = [...items].sort((a, b) => {
-    if (a.status !== b.status) return a.status === 'Paid' ? 1 : -1
-    if (!a.dueDate && !b.dueDate) return 0
-    if (!a.dueDate) return 1
-    if (!b.dueDate) return -1
-    return new Date(a.dueDate) - new Date(b.dueDate)
-  })
 
   return (
     <>
@@ -192,9 +187,58 @@ function Budget() {
           box-shadow: var(--shadow-lifted);
         }
 
+        .budget-list__header {
+          display: grid;
+          grid-template-columns: 1fr 90px 70px 110px 80px 80px;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.55rem 1rem;
+          font-family: var(--font-body);
+          font-size: 0.68rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--text-muted);
+          background: var(--ivory-dark);
+          border-bottom: 1px solid var(--border);
+        }
+
+        .budget-group__header {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.6rem 1rem;
+          border-bottom: 1px solid var(--border);
+          background: var(--ivory-dark);
+        }
+
+        .budget-group__label {
+          font-family: var(--font-body);
+          font-size: 0.68rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: var(--text-muted);
+          white-space: nowrap;
+        }
+
+        .budget-group__line {
+          flex: 1;
+          height: 1px;
+          background: var(--border);
+        }
+
+        .budget-group__total {
+          font-family: var(--font-body);
+          font-size: 0.78rem;
+          font-weight: 500;
+          color: var(--text-muted);
+          white-space: nowrap;
+        }
+
         .budget-row {
           display: grid;
-          grid-template-columns: 1fr auto auto 6rem 8.5rem 6.5rem auto;
+          grid-template-columns: 1fr 90px 70px 110px 80px 80px;
           align-items: center;
           gap: 0.75rem;
           padding: 0.7rem 1rem;
@@ -204,16 +248,6 @@ function Budget() {
 
         .budget-row:last-child {
           border-bottom: none;
-        }
-
-        .budget-row--header {
-          font-size: 0.68rem;
-          font-weight: 500;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: var(--text-muted);
-          background: var(--ivory-dark);
-          padding: 0.55rem 1rem;
         }
 
         .budget-row--paid {
@@ -319,9 +353,8 @@ function Budget() {
         </div>
 
         <div className="budget-list">
-          <div className="budget-row budget-row--header">
+          <div className="budget-list__header">
             <span>Item</span>
-            <span>Category</span>
             <span>Who</span>
             <span>How</span>
             <span>Due</span>
@@ -329,39 +362,50 @@ function Budget() {
             <span>Status</span>
           </div>
 
-          {sorted.map(item => (
-            <div
-              key={item.id}
-              className={`budget-row${item.status === 'Paid' ? ' budget-row--paid' : ''}`}
-            >
-              <span className="budget-row__name">
-                {item.item}
-                {item.notes && (
-                  <span className="budget-row__note-dot" title={item.notes}>·</span>
-                )}
-              </span>
+          {CATEGORY_ORDER.map(category => {
+            const groupItems = items.filter(i => i.category === category)
+            if (groupItems.length === 0) return null
 
-              <span
-                className="budget-badge"
-                style={CATEGORY_STYLES[item.category] ?? CATEGORY_STYLES['Misc']}
-              >
-                {item.category}
-              </span>
+            const groupTotal = groupItems.reduce((sum, i) => sum + i.cost, 0)
+            const sorted = sortGroupItems(groupItems)
 
-              {item.who
-                ? <span className="budget-badge" style={WHO_STYLES[item.who]}>{item.who}</span>
-                : <span className="budget-badge budget-badge--empty">—</span>
-              }
+            return (
+              <div key={category}>
+                <div className="budget-group__header">
+                  <span className="budget-group__label">{category}</span>
+                  <span className="budget-group__line" />
+                  <span className="budget-group__total">{fmtUSD(groupTotal, 0)}</span>
+                </div>
 
-              <span className="budget-row__muted">{item.how || '—'}</span>
-              <span className="budget-row__muted">{fmtDate(item.dueDate)}</span>
-              <span className="budget-row__amount">{fmtUSD(item.cost)}</span>
+                {sorted.map((item, idx) => (
+                  <div
+                    key={item.id}
+                    className={`budget-row${item.status === 'Paid' ? ' budget-row--paid' : ''}${idx === sorted.length - 1 ? ' budget-row--last' : ''}`}
+                  >
+                    <span className="budget-row__name">
+                      {item.item}
+                      {item.notes && (
+                        <span className="budget-row__note-dot" title={item.notes}>·</span>
+                      )}
+                    </span>
 
-              <span className="budget-badge" style={STATUS_STYLES[item.status]}>
-                {item.status}
-              </span>
-            </div>
-          ))}
+                    {item.who
+                      ? <span className="budget-badge" style={WHO_STYLES[item.who]}>{item.who}</span>
+                      : <span className="budget-badge budget-badge--empty">—</span>
+                    }
+
+                    <span className="budget-row__muted">{item.how || '—'}</span>
+                    <span className="budget-row__muted">{fmtDate(item.dueDate)}</span>
+                    <span className="budget-row__amount">{fmtUSD(item.cost)}</span>
+
+                    <span className="budget-badge" style={STATUS_STYLES[item.status]}>
+                      {item.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )
+          })}
         </div>
       </div>
     </>
