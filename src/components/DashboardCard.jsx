@@ -1,7 +1,7 @@
 /**
  * DashboardCard — reusable card shell for Dashboard widgets.
  * Accepts a `title` (string) and `children` (widget content).
- * Renders a warm ivory card with a rose top accent line, border, and shadow.
+ * Renders a warm ivory card with a uniform border, lifted shadow, and rounded corners.
  */
 function DashboardCard({ title, children }) {
   return (
@@ -10,10 +10,9 @@ function DashboardCard({ title, children }) {
         .dashboard-card {
           background: var(--ivory-dark);
           border: 1px solid var(--border);
-          border-top: 3px solid var(--rose);
-          border-radius: 12px;
+          border-radius: 16px;
           padding: 1.5rem;
-          box-shadow: var(--shadow);
+          box-shadow: var(--shadow-lifted);
           display: flex;
           flex-direction: column;
           gap: 1rem;

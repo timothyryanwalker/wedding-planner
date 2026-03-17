@@ -1,7 +1,7 @@
 /**
  * NavBar — fixed top navigation bar, present on every page.
  * Uses NavLink from react-router-dom to highlight the active route.
- * Background: --rose (burgundy). Active link pill: --ivory-dark.
+ * Background: --ivory with subtle border. Active link: --rose underline.
  */
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
@@ -32,17 +32,17 @@ function NavBar() {
           align-items: center;
           padding: 0 1.5rem;
           height: 56px;
-          background: var(--rose);
-          box-shadow: 0 2px 8px rgba(48, 14, 15, 0.25);
+          background: var(--ivory);
+          box-shadow: 0 1px 0 var(--border), 0 2px 12px rgba(90, 60, 40, 0.06);
         }
 
         .navbar__wordmark {
-          font-family: var(--font-heading);
-          font-size: 1.2rem;
-          font-weight: 600;
-          color: var(--ivory);
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
+          font-family: var(--font-display);
+          font-style: italic;
+          font-size: 1.4rem;
+          font-weight: 500;
+          color: var(--rose-dark);
+          letter-spacing: 0.01em;
           user-select: none;
         }
 
@@ -59,29 +59,31 @@ function NavBar() {
         .nav-link {
           display: inline-block;
           padding: 0.35rem 0.75rem;
-          border-radius: 999px;
           font-family: var(--font-body);
           font-size: 0.85rem;
           font-weight: 400;
-          color: var(--ivory);
+          color: var(--text);
           text-decoration: none;
           letter-spacing: 0.03em;
-          transition: background 0.15s ease, color 0.15s ease;
+          transition: color 0.15s ease;
         }
 
         .nav-link:hover {
-          background: rgba(253, 249, 240, 0.15);
+          color: var(--text-heading);
           text-decoration: none;
         }
 
         .nav-link--active {
-          background: var(--ivory-dark);
-          color: var(--rose-dark);
+          color: var(--rose);
           font-weight: 500;
+          text-decoration: underline;
+          text-underline-offset: 3px;
+          text-decoration-thickness: 1.5px;
+          text-decoration-color: var(--rose);
         }
 
         .nav-link--active:hover {
-          background: var(--ivory-dark);
+          color: var(--rose);
         }
 
         .navbar__signout {
@@ -91,21 +93,21 @@ function NavBar() {
           font-weight: 400;
           padding: 0.3rem 0.85rem;
           border-radius: 999px;
-          border: 1px solid rgba(253, 249, 240, 0.4);
+          border: 1px solid var(--border);
           background: transparent;
-          color: var(--ivory);
+          color: var(--text-muted);
           cursor: pointer;
-          transition: background 0.15s ease, border-color 0.15s ease;
+          transition: border-color 0.15s ease, color 0.15s ease;
         }
 
         .navbar__signout:hover {
-          background: rgba(253, 249, 240, 0.15);
-          border-color: rgba(253, 249, 240, 0.7);
+          border-color: var(--text-muted);
+          color: var(--text);
         }
 
         @media (max-width: 600px) {
           .navbar__wordmark {
-            font-size: 1rem;
+            font-size: 1.1rem;
           }
 
           .nav-link {

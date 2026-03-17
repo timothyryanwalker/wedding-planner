@@ -1,3 +1,6 @@
+/* ─── Fonts ──────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garant:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap');
+
 /* ─── Design Tokens ──────────────────────────────────────────────────────── */
 :root {
   /* Palette */
@@ -18,10 +21,18 @@
   --text-muted:   #8a7070;
   --text-heading: #300e0f;
   --border:       #e8ddd5;
-  --shadow:       rgba(90, 60, 40, 0.08) 0 4px 16px, rgba(90, 60, 40, 0.04) 0 1px 4px;
+  --shadow:         rgba(90, 60, 40, 0.08) 0 4px 16px, rgba(90, 60, 40, 0.04) 0 1px 4px;
+  --shadow-lifted:  rgba(90, 60, 40, 0.12) 0 6px 0 -2px, rgba(90, 60, 40, 0.06) 0 2px 8px;
 
-  /* Fonts — Helvetica Neue is a system font, no import needed */
-  --font-heading: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* Gradients */
+  --bg-gradient:    linear-gradient(160deg, #f9e8dc 0%, #fdf9f0 60%);
+
+  /* Decorative */
+  --decorative-color: var(--rose);
+
+  /* Fonts — heading loaded via Google Fonts; body is system font */
+  --font-heading: 'Cormorant Garant', Georgia, serif;
+  --font-display: 'Cormorant Garant', Georgia, serif;
   --font-body:    'Helvetica Neue', Helvetica, Arial, sans-serif;
 
   /* Base */
@@ -43,7 +54,8 @@
 
 body {
   margin: 0;
-  background: var(--ivory);
+  background: var(--bg-gradient);
+  min-height: 100vh;
 }
 
 /* ─── Root Layout ────────────────────────────────────────────────────────── */

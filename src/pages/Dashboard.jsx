@@ -1,7 +1,7 @@
 /**
  * Dashboard — main overview page.
- * Assembles all four widgets: WeddingCountdown, TaskSummary, BudgetSnapshot, GoalProgress.
- * Uses a 2-column CSS grid; countdown and goals span full width, tasks and budget sit side-by-side.
+ * Romantic Editorial hero with couple name, date, diamond divider, and days countdown.
+ * Assembles widgets: TaskSummary, BudgetSnapshot, GoalProgress in a 2-column grid below.
  */
 import TaskSummary      from '../components/TaskSummary'
 import BudgetSnapshot   from '../components/BudgetSnapshot'
@@ -20,43 +20,79 @@ function Dashboard() {
         .dashboard {
           max-width: 900px;
           margin: 0 auto;
-          padding: 2.5rem 1.5rem 4rem;
+          padding: 3rem 1.5rem 5rem;
         }
 
-        .dashboard__header {
-          margin-bottom: 2rem;
+        /* Hero */
+        .dashboard__hero {
           text-align: center;
+          padding: 2rem 0 2.5rem;
         }
 
-        .dashboard__title {
-          font-family: var(--font-heading);
-          font-size: 2.5rem;
-          font-weight: 500;
+        .dashboard__names {
+          font-family: var(--font-display);
+          font-style: italic;
+          font-size: 3rem;
+          font-weight: 400;
           color: var(--text-heading);
-          margin-bottom: 0.35rem;
+          line-height: 1.15;
+          margin-bottom: 0.6rem;
         }
 
-        .dashboard__subtitle {
+        .dashboard__date {
           font-family: var(--font-body);
-          font-size: 1.1rem;
+          font-size: 0.72rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.14em;
+          color: var(--text-muted);
+        }
+
+        .dashboard__countdown {
+          font-family: var(--font-display);
+          font-style: italic;
+          font-size: 4rem;
           font-weight: 300;
-          color: var(--text);
+          color: var(--rose-dark);
+          line-height: 1.1;
+          margin-bottom: 0.4rem;
+        }
+
+        .dashboard__until {
+          font-family: var(--font-body);
+          font-size: 0.8rem;
+          font-weight: 400;
+          color: var(--text-muted);
           letter-spacing: 0.06em;
         }
 
-        .dashboard__days {
-          font-family: var(--font-body);
-          font-size: 1rem;
-          font-weight: 400;
-          color: var(--rose);
-          margin-top: 0.4rem;
-          letter-spacing: 0.04em;
+        /* Diamond divider */
+        .dash-divider {
+          display: flex;
+          align-items: center;
+          gap: 0.85rem;
+          margin: 1.5rem auto;
+          max-width: 320px;
         }
 
+        .dash-divider__line {
+          flex: 1;
+          height: 1px;
+          background: var(--border);
+        }
+
+        .dash-divider__diamond {
+          font-size: 0.65rem;
+          color: var(--decorative-color);
+          line-height: 1;
+          user-select: none;
+        }
+
+        /* Grid */
         .dashboard__grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 1.25rem;
+          gap: 1.5rem;
         }
 
         .dashboard__full {
@@ -64,6 +100,14 @@ function Dashboard() {
         }
 
         @media (max-width: 600px) {
+          .dashboard__names {
+            font-size: 2.2rem;
+          }
+
+          .dashboard__countdown {
+            font-size: 3rem;
+          }
+
           .dashboard__grid {
             grid-template-columns: 1fr;
           }
@@ -75,17 +119,33 @@ function Dashboard() {
       `}</style>
 
       <div className="dashboard">
-        <header className="dashboard__header">
-          <h1 className="dashboard__title">Your Wedding</h1>
-          <p className="dashboard__subtitle">Taylor &amp; Timothy &nbsp;·&nbsp; May 30, 2027</p>
-          <p className="dashboard__days">{daysLeft} days to go</p>
-        </header>
+
+        <div className="dashboard__hero">
+          <p className="dashboard__names">Taylor &amp; Timothy</p>
+          <p className="dashboard__date">May 30, 2027</p>
+
+          <div className="dash-divider">
+            <span className="dash-divider__line" />
+            <span className="dash-divider__diamond">◇</span>
+            <span className="dash-divider__line" />
+          </div>
+
+          <p className="dashboard__countdown">{daysLeft} days</p>
+          <p className="dashboard__until">until your wedding</p>
+        </div>
+
+        <div className="dash-divider">
+          <span className="dash-divider__line" />
+          <span className="dash-divider__diamond">◇</span>
+          <span className="dash-divider__line" />
+        </div>
 
         <div className="dashboard__grid">
           <TaskSummary />
           <BudgetSnapshot />
           <div className="dashboard__full"><GoalProgress /></div>
         </div>
+
       </div>
     </>
   )
