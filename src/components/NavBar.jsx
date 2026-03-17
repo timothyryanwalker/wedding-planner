@@ -4,6 +4,7 @@
  * Background: --rose (burgundy). Active link pill: --ivory-dark.
  */
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 const LINKS = [
   { to: '/',        label: 'Dashboard' },
@@ -15,6 +16,8 @@ const LINKS = [
 ]
 
 function NavBar() {
+  const { signOut } = useAuth()
+
   return (
     <>
       <style>{`
@@ -81,6 +84,25 @@ function NavBar() {
           background: var(--ivory-dark);
         }
 
+        .navbar__signout {
+          justify-self: end;
+          font-family: var(--font-body);
+          font-size: 0.8rem;
+          font-weight: 400;
+          padding: 0.3rem 0.85rem;
+          border-radius: 999px;
+          border: 1px solid rgba(253, 249, 240, 0.4);
+          background: transparent;
+          color: var(--ivory);
+          cursor: pointer;
+          transition: background 0.15s ease, border-color 0.15s ease;
+        }
+
+        .navbar__signout:hover {
+          background: rgba(253, 249, 240, 0.15);
+          border-color: rgba(253, 249, 240, 0.7);
+        }
+
         @media (max-width: 600px) {
           .navbar__wordmark {
             font-size: 1rem;
@@ -94,7 +116,7 @@ function NavBar() {
       `}</style>
 
       <nav className="navbar" aria-label="Main navigation">
-        <span className="navbar__wordmark">Vows</span>
+        <span className="navbar__wordmark">Lapel</span>
         <ul className="navbar__links">
           {LINKS.map(({ to, label }) => (
             <li key={to}>
@@ -110,6 +132,7 @@ function NavBar() {
             </li>
           ))}
         </ul>
+        <button className="navbar__signout" onClick={signOut}>Sign out</button>
       </nav>
     </>
   )

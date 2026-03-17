@@ -1,32 +1,51 @@
 /**
  * App — root component.
- * Sets up client-side routing for all pages.
- * Add new routes here as pages are built out.
+ * Sets up auth context, client-side routing, and protected routes.
+ * Add new routes inside the AppLayout route as pages are built out.
  */
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Dashboard from './pages/Dashboard'
-import Tasks     from './pages/Tasks'
-import NavBar    from './components/NavBar'
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute  from './components/ProtectedRoute'
+import NavBar          from './components/NavBar'
+import Dashboard       from './pages/Dashboard'
+import Tasks           from './pages/Tasks'
+import Login           from './pages/Login'
+
+/* Placeholder components for future pages */
 const Vendors = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Vendors — coming soon</p>
 const Budget  = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Budget — coming soon</p>
 const Goals   = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Goals — coming soon</p>
 const Guests  = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Guests — coming soon</p>
 
+/* Layout rendered inside protected routes — includes NavBar and main content area */
+const AppLayout = () => (
+  <>
+    <NavBar />
+    <main style={{ paddingTop: '56px' }}>
+      <Outlet />
+    </main>
+  </>
+)
+
 function App() {
   return (
-    <BrowserRouter>
-      <NavBar />
-      <main style={{ paddingTop: '56px' }}>
+    <AuthProvider>
+      <BrowserRouter>
         <Routes>
-          <Route path="/"        element={<Dashboard />} />
-          <Route path="/tasks"   element={<Tasks />}     />
-          <Route path="/vendors" element={<Vendors />}   />
-          <Route path="/budget"  element={<Budget />}    />
-          <Route path="/goals"   element={<Goals />}     />
-          <Route path="/guests"  element={<Guests />}    />
+          <Route path="/login" element={<Login />} />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppLayout />}>
+              <Route path="/"        element={<Dashboard />} />
+              <Route path="/tasks"   element={<Tasks />}     />
+              <Route path="/vendors" element={<Vendors />}   />
+              <Route path="/budget"  element={<Budget />}    />
+              <Route path="/goals"   element={<Goals />}     />
+              <Route path="/guests"  element={<Guests />}    />
+            </Route>
+          </Route>
         </Routes>
-      </main>
-    </BrowserRouter>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 
