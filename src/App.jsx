@@ -9,11 +9,9 @@ import ProtectedRoute  from './components/ProtectedRoute'
 import NavBar          from './components/NavBar'
 import Dashboard       from './pages/Dashboard'
 import Tasks           from './pages/Tasks'
+import Vendors         from './pages/Vendors'
+import Budget          from './pages/Budget'
 import Login           from './pages/Login'
-
-/* Placeholder components for future pages */
-const Vendors = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Vendors — coming soon</p>
-const Budget  = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Budget — coming soon</p>
 const Goals   = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Goals — coming soon</p>
 const Guests  = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Guests — coming soon</p>
 
