@@ -5,6 +5,7 @@
  */
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import DiamondDivider from '../components/DiamondDivider'
 
 function Login() {
   const { session, signInWithGoogle } = useAuth()
@@ -65,26 +66,6 @@ function Login() {
           color: var(--text-muted);
         }
 
-        .dash-divider {
-          display: flex;
-          align-items: center;
-          gap: 0.85rem;
-          margin: 1.25rem 0;
-          width: 100%;
-        }
-
-        .dash-divider__line {
-          flex: 1;
-          height: 1px;
-          background: var(--border);
-        }
-
-        .dash-divider__diamond {
-          font-size: 0.65rem;
-          color: var(--decorative-color);
-          line-height: 1;
-          user-select: none;
-        }
 
         .login-card__btn {
           font-family: var(--font-body);
@@ -110,11 +91,7 @@ function Login() {
           <div className="login-card__wordmark">Lapel</div>
           <p className="login-card__subtitle">Taylor &amp; Timothy</p>
           <p className="login-card__date">May 30, 2027</p>
-          <div className="dash-divider">
-            <span className="dash-divider__line" />
-            <span className="dash-divider__diamond">◇</span>
-            <span className="dash-divider__line" />
-          </div>
+          <DiamondDivider />
           <button className="login-card__btn" onClick={signInWithGoogle}>
             Sign in with Google
           </button>

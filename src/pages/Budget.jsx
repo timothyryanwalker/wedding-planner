@@ -6,6 +6,7 @@
 import { useState } from 'react'
 import Drawer         from '../components/Drawer'
 import BudgetItemForm from '../components/BudgetItemForm'
+import PageHeader     from '../components/PageHeader'
 
 const TOTAL_BUDGET = 40000
 
@@ -107,45 +108,6 @@ function Budget() {
           padding: 3rem 1.5rem 5rem;
         }
 
-        .budget-page__header {
-          margin-bottom: 0.75rem;
-        }
-
-        .budget-page__title {
-          font-family: var(--font-display);
-          font-style: italic;
-          font-size: 2.5rem;
-          font-weight: 400;
-          color: var(--text-heading);
-          margin-bottom: 0.25rem;
-        }
-
-        .dash-divider {
-          display: flex;
-          align-items: center;
-          gap: 0.85rem;
-          margin: 1.25rem 0;
-        }
-
-        .dash-divider__line {
-          flex: 1;
-          height: 1px;
-          background: var(--border);
-        }
-
-        .dash-divider__diamond {
-          font-size: 0.65rem;
-          color: var(--decorative-color);
-          line-height: 1;
-          user-select: none;
-        }
-
-        .budget-page__summary {
-          font-family: var(--font-body);
-          font-size: 0.9rem;
-          font-weight: 300;
-          color: var(--text-muted);
-        }
 
         .budget-page__cards {
           display: grid;
@@ -373,18 +335,10 @@ function Budget() {
       `}</style>
 
       <div className="budget-page">
-        <header className="budget-page__header">
-          <h1 className="budget-page__title">Budget</h1>
-          <p className="budget-page__summary">
-            {fmtUSD(totalSpent, 0)} of {fmtUSD(TOTAL_BUDGET, 0)} spent
-          </p>
-        </header>
-
-        <div className="dash-divider">
-          <span className="dash-divider__line" />
-          <span className="dash-divider__diamond">◇</span>
-          <span className="dash-divider__line" />
-        </div>
+        <PageHeader
+          title="Budget"
+          summary={`${fmtUSD(totalSpent, 0)} of ${fmtUSD(TOTAL_BUDGET, 0)} spent`}
+        />
 
         <div className="budget-page__toolbar">
           <button className="budget-page__add-btn" onClick={handleAddItem}>+ Add Item</button>

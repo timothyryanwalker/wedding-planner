@@ -6,6 +6,7 @@
 import { useState, useRef, useEffect } from 'react'
 import VendorCard  from '../components/VendorCard'
 import VendorModal from '../components/VendorModal'
+import PageHeader  from '../components/PageHeader'
 
 const CATEGORY_OPTIONS = [
   'Florist', 'Hair & Makeup', 'Photography', 'Videography',
@@ -150,45 +151,6 @@ function Vendors() {
           padding: 3rem 1.5rem 5rem;
         }
 
-        .vendors-page__header {
-          margin-bottom: 0.75rem;
-        }
-
-        .vendors-page__title {
-          font-family: var(--font-display);
-          font-style: italic;
-          font-size: 2.5rem;
-          font-weight: 400;
-          color: var(--text-heading);
-          margin-bottom: 0.25rem;
-        }
-
-        .dash-divider {
-          display: flex;
-          align-items: center;
-          gap: 0.85rem;
-          margin: 1.25rem 0;
-        }
-
-        .dash-divider__line {
-          flex: 1;
-          height: 1px;
-          background: var(--border);
-        }
-
-        .dash-divider__diamond {
-          font-size: 0.65rem;
-          color: var(--decorative-color);
-          line-height: 1;
-          user-select: none;
-        }
-
-        .vendors-page__summary {
-          font-family: var(--font-body);
-          font-size: 0.9rem;
-          font-weight: 300;
-          color: var(--text-muted);
-        }
 
         .vendors-page__toolbar {
           display: flex;
@@ -326,18 +288,10 @@ function Vendors() {
       `}</style>
 
       <div className="vendors-page">
-        <header className="vendors-page__header">
-          <h1 className="vendors-page__title">Vendors</h1>
-          <p className="vendors-page__summary">
-            {vendors.length} vendor{vendors.length !== 1 ? 's' : ''} · {fmtCurrency(totalBudget)} total
-          </p>
-        </header>
-
-        <div className="dash-divider">
-          <span className="dash-divider__line" />
-          <span className="dash-divider__diamond">◇</span>
-          <span className="dash-divider__line" />
-        </div>
+        <PageHeader
+          title="Vendors"
+          summary={`${vendors.length} vendor${vendors.length !== 1 ? 's' : ''} · ${fmtCurrency(totalBudget)} total`}
+        />
 
         <div className="vendors-page__toolbar">
           <div className="vf-wrap" ref={filtersRef}>

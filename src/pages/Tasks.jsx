@@ -4,10 +4,11 @@
  * Clicking a row or "+ Add Task" opens a Drawer with TaskForm for CRUD.
  */
 import { useState } from 'react'
-import TaskCard   from '../components/TaskCard'
-import TaskFilter from '../components/TaskFilter'
-import Drawer     from '../components/Drawer'
-import TaskForm   from '../components/TaskForm'
+import TaskCard    from '../components/TaskCard'
+import TaskFilter  from '../components/TaskFilter'
+import Drawer      from '../components/Drawer'
+import TaskForm    from '../components/TaskForm'
+import PageHeader  from '../components/PageHeader'
 
 const SAMPLE_TASKS = [
   { id:  1, title: 'Ask Matt to be Best Man',                       completed: false, dueDate: '2026-03-20', owner: 'Timothy', category: 'Admin',       priority: 'High'   },
@@ -152,45 +153,6 @@ function Tasks() {
           padding: 3rem 1.5rem 5rem;
         }
 
-        .tasks-page__header {
-          margin-bottom: 0.75rem;
-        }
-
-        .tasks-page__title {
-          font-family: var(--font-display);
-          font-style: italic;
-          font-size: 2.5rem;
-          font-weight: 400;
-          color: var(--text-heading);
-          margin-bottom: 0.25rem;
-        }
-
-        .dash-divider {
-          display: flex;
-          align-items: center;
-          gap: 0.85rem;
-          margin: 1.25rem 0;
-        }
-
-        .dash-divider__line {
-          flex: 1;
-          height: 1px;
-          background: var(--border);
-        }
-
-        .dash-divider__diamond {
-          font-size: 0.65rem;
-          color: var(--decorative-color);
-          line-height: 1;
-          user-select: none;
-        }
-
-        .tasks-page__summary {
-          font-family: var(--font-body);
-          font-size: 0.9rem;
-          font-weight: 300;
-          color: var(--text-muted);
-        }
 
         .tasks-page__list {
           border: 1px solid var(--border);
@@ -234,16 +196,7 @@ function Tasks() {
       `}</style>
 
       <div className="tasks-page">
-        <header className="tasks-page__header">
-          <h1 className="tasks-page__title">Tasks</h1>
-          <p className="tasks-page__summary">{completed} of {total} complete</p>
-        </header>
-
-        <div className="dash-divider">
-          <span className="dash-divider__line" />
-          <span className="dash-divider__diamond">◇</span>
-          <span className="dash-divider__line" />
-        </div>
+        <PageHeader title="Tasks" summary={`${completed} of ${total} complete`} />
 
         <div className="tasks-page__toolbar">
           <button className="tasks-page__add-btn" onClick={handleAddTask}>+ Add Task</button>

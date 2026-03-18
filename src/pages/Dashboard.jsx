@@ -6,6 +6,7 @@
 import TaskSummary      from '../components/TaskSummary'
 import BudgetSnapshot   from '../components/BudgetSnapshot'
 import GoalProgress     from '../components/GoalProgress'
+import DiamondDivider   from '../components/DiamondDivider'
 
 function Dashboard() {
   const today = new Date()
@@ -66,27 +67,6 @@ function Dashboard() {
           letter-spacing: 0.06em;
         }
 
-        /* Diamond divider */
-        .dash-divider {
-          display: flex;
-          align-items: center;
-          gap: 0.85rem;
-          margin: 1.5rem auto;
-          max-width: 320px;
-        }
-
-        .dash-divider__line {
-          flex: 1;
-          height: 1px;
-          background: var(--border);
-        }
-
-        .dash-divider__diamond {
-          font-size: 0.65rem;
-          color: var(--decorative-color);
-          line-height: 1;
-          user-select: none;
-        }
 
         /* Grid */
         .dashboard__grid {
@@ -124,21 +104,13 @@ function Dashboard() {
           <p className="dashboard__names">Taylor &amp; Timothy</p>
           <p className="dashboard__date">May 30, 2027</p>
 
-          <div className="dash-divider">
-            <span className="dash-divider__line" />
-            <span className="dash-divider__diamond">◇</span>
-            <span className="dash-divider__line" />
-          </div>
+          <DiamondDivider centered />
 
           <p className="dashboard__countdown">{daysLeft} days</p>
           <p className="dashboard__until">until your wedding</p>
         </div>
 
-        <div className="dash-divider">
-          <span className="dash-divider__line" />
-          <span className="dash-divider__diamond">◇</span>
-          <span className="dash-divider__line" />
-        </div>
+        <DiamondDivider centered />
 
         <div className="dashboard__grid">
           <TaskSummary />
