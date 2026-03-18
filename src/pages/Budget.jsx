@@ -1,8 +1,11 @@
 /**
  * Budget — budget tracking page.
  * Shows 4 summary cards, a progress bar, and a payment list grouped by category.
- * Display-only for Phase 1 — CRUD to be added after layout approval.
+ * Clicking a row or "+ Add Item" opens a Drawer with BudgetItemForm for CRUD.
  */
+import { useState } from 'react'
+import Drawer         from '../components/Drawer'
+import BudgetItemForm from '../components/BudgetItemForm'
 
 const TOTAL_BUDGET = 40000
 
@@ -58,7 +61,37 @@ function sortGroupItems(items) {
 }
 
 function Budget() {
-  const items = SAMPLE_BUDGET_ITEMS
+  const [items,      setItems]      = useState(SAMPLE_BUDGET_ITEMS)
+  const [drawerItem, setDrawerItem] = useState(null)
+
+  function handleRowClick(item) {
+    setDrawerItem(item)
+  }
+
+  function handleAddItem() {
+    setDrawerItem({
+      id: -Date.now(), item: '', cost: 0, status: 'Unpaid',
+      who: '', how: '', dueDate: '', datePaid: '', category: 'Misc', notes: '',
+    })
+  }
+
+  function handleSave(updatedItem) {
+    if (updatedItem.id < 0) {
+      setItems(prev => [...prev, { ...updatedItem, id: Date.now() }])
+    } else {
+      setItems(prev => prev.map(i => i.id === updatedItem.id ? updatedItem : i))
+    }
+    setDrawerItem(null)
+  }
+
+  function handleDelete(id) {
+    setItems(prev => prev.filter(i => i.id !== id))
+    setDrawerItem(null)
+  }
+
+  function handleCloseDrawer() {
+    setDrawerItem(null)
+  }
 
   const totalSpent  = items.filter(i => i.status === 'Paid').reduce((sum, i) => sum + i.cost, 0)
   const totalUnpaid = items.filter(i => i.status === 'Unpaid').reduce((sum, i) => sum + i.cost, 0)
@@ -236,6 +269,30 @@ function Budget() {
           white-space: nowrap;
         }
 
+        .budget-page__toolbar {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 1.5rem;
+          margin-top: -0.75rem;
+        }
+
+        .budget-page__add-btn {
+          font-family: var(--font-body);
+          font-size: 0.85rem;
+          font-weight: 500;
+          padding: 0.4rem 1.1rem;
+          border-radius: 999px;
+          border: none;
+          background: var(--rose);
+          color: var(--ivory);
+          cursor: pointer;
+          transition: background 0.15s ease;
+        }
+
+        .budget-page__add-btn:hover {
+          background: var(--rose-dark);
+        }
+
         .budget-row {
           display: grid;
           grid-template-columns: 1fr 90px 70px 110px 80px 80px;
@@ -244,6 +301,11 @@ function Budget() {
           padding: 0.7rem 1rem;
           border-bottom: 1px solid var(--border);
           font-family: var(--font-body);
+          cursor: pointer;
+        }
+
+        .budget-row:hover {
+          background: var(--ivory-dark);
         }
 
         .budget-row:last-child {
@@ -324,6 +386,10 @@ function Budget() {
           <span className="dash-divider__line" />
         </div>
 
+        <div className="budget-page__toolbar">
+          <button className="budget-page__add-btn" onClick={handleAddItem}>+ Add Item</button>
+        </div>
+
         <div className="budget-page__cards">
           <div className="budget-card">
             <div className="budget-card__label">Total Budget</div>
@@ -381,6 +447,7 @@ function Budget() {
                   <div
                     key={item.id}
                     className={`budget-row${item.status === 'Paid' ? ' budget-row--paid' : ''}${idx === sorted.length - 1 ? ' budget-row--last' : ''}`}
+                    onClick={() => handleRowClick(item)}
                   >
                     <span className="budget-row__name">
                       {item.item}
@@ -408,6 +475,19 @@ function Budget() {
           })}
         </div>
       </div>
+
+      <Drawer
+        isOpen={drawerItem !== null}
+        onClose={handleCloseDrawer}
+        title={drawerItem?.id < 0 ? 'Add Item' : 'Edit Item'}
+      >
+        <BudgetItemForm
+          item={drawerItem}
+          onSave={handleSave}
+          onDelete={handleDelete}
+          onClose={handleCloseDrawer}
+        />
+      </Drawer>
     </>
   )
 }
