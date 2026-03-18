@@ -60,6 +60,13 @@ const SAMPLE_TASKS = [
   { id: 47, title: 'Pay Air Hair & Makeup deposit',                 completed: true,  dueDate: '2026-01-29', owner: 'Taylor',  category: 'Attire',      priority: 'High'   },
 ]
 
+const GOALS = [
+  { id: 1, title: 'Lock in all vendors' },
+  { id: 2, title: 'Finalise the look' },
+  { id: 3, title: 'Sort the guest list' },
+  { id: 4, title: 'Plan the honeymoon' },
+]
+
 const TODAY = new Date()
 TODAY.setHours(0, 0, 0, 0)
 
@@ -228,6 +235,7 @@ function Tasks() {
           onSave={handleSave}
           onDelete={handleDelete}
           onClose={handleCloseDrawer}
+          goals={GOALS}
         />
       </Drawer>
     </>

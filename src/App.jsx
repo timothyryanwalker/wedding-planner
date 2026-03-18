@@ -12,7 +12,7 @@ import Tasks           from './pages/Tasks'
 import Vendors         from './pages/Vendors'
 import Budget          from './pages/Budget'
 import Login           from './pages/Login'
-const Goals   = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Goals — coming soon</p>
+import Goals           from './pages/Goals'
 const Guests  = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Guests — coming soon</p>
 
 /* Layout rendered inside protected routes — includes NavBar and main content area */

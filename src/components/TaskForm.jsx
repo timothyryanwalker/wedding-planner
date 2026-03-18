@@ -9,12 +9,13 @@ const OWNER_OPTIONS    = ['Taylor', 'Timothy', 'Both']
 const CATEGORY_OPTIONS = ['Admin', 'Attire', 'Flowers', 'Honeymoon', 'Music', 'Photography', 'Stationery', 'Venue', 'Other']
 const PRIORITY_OPTIONS = ['High', 'Medium', 'Low']
 
-function TaskForm({ task, onSave, onDelete, onClose }) {
+function TaskForm({ task, onSave, onDelete, onClose, goals = [] }) {
   const [title,    setTitle]    = useState('')
   const [owner,    setOwner]    = useState('Both')
   const [category, setCategory] = useState('Admin')
   const [priority, setPriority] = useState('Medium')
   const [dueDate,  setDueDate]  = useState('')
+  const [goalId,   setGoalId]   = useState(null)
 
   useEffect(() => {
     if (!task) return
@@ -23,13 +24,14 @@ function TaskForm({ task, onSave, onDelete, onClose }) {
     setCategory(task.category ?? 'Admin')
     setPriority(task.priority ?? 'Medium')
     setDueDate( task.dueDate  ?? '')
+    setGoalId(  task.goalId   ?? null)
   }, [task])
 
   const isNew = task?.id < 0
 
   function handleSave() {
     if (!title.trim()) return
-    onSave({ ...task, title: title.trim(), owner, category, priority, dueDate })
+    onSave({ ...task, title: title.trim(), owner, category, priority, dueDate, goalId })
   }
 
   return (
@@ -192,6 +194,14 @@ function TaskForm({ task, onSave, onDelete, onClose }) {
           value={dueDate}
           onChange={e => setDueDate(e.target.value)}
         />
+      </div>
+
+      <div className="tf__field">
+        <label className="tf__label">Link to goal</label>
+        <select className="tf__select" value={goalId ?? ''} onChange={e => setGoalId(e.target.value || null)}>
+          <option value="">No goal</option>
+          {goals.map(g => <option key={g.id} value={g.id}>{g.title}</option>)}
+        </select>
       </div>
 
       <div className="tf__footer">

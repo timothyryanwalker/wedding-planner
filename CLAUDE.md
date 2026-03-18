@@ -43,10 +43,23 @@ Tables in Supabase: users, tasks, vendors, goals, budget_items, guests
 
 ## What's been built
 - **NavBar** — fixed top nav, all six routes, active link highlighting
-- **Dashboard** — page header with days-to-go countdown, TaskSummary, BudgetSnapshot, GoalProgress widgets
-- **Tasks page** — full task list with inline add/edit/delete, filter by status/owner, sort by due date/priority/owner/category, priority color borders, owner badges, overdue highlighting
-- **Routing** — react-router-dom wired in App.jsx; placeholder pages for Vendors, Budget, Goals, Guests
+- **Dashboard** — romantic editorial hero (couple name, date, countdown), TaskSummary, BudgetSnapshot, GoalProgress widgets
+- **Tasks page** — full task list with filter by status/owner, sort by due date/priority/owner/category, priority color borders, owner badges, overdue highlighting; add/edit/delete via slide-in Drawer + TaskForm
+- **Vendors page** — vendor cards in responsive grid, multi-select category/status filters, add/edit/delete via VendorModal
+- **Budget page** — summary cards, progress bar, payment list grouped by category; add/edit/delete via slide-in Drawer + BudgetItemForm
+- **Auth** — Supabase Google OAuth via AuthContext, ProtectedRoute, Login page
+- **Routing** — react-router-dom wired in App.jsx
+
+### Shared components
+- **DiamondDivider** — reusable ◇ divider; `centered` prop for Dashboard hero variant; used on all pages
+- **PageHeader** — reusable page title + summary + DiamondDivider; used by Tasks, Vendors, Budget
+- **Drawer** — reusable slide-in drawer shell; props: isOpen, onClose, title, children
+- **TaskForm** — add/edit task form, rendered inside Drawer
+- **BudgetItemForm** — add/edit budget item form, rendered inside Drawer
+- **TaskCard** — single task row (display-only; clicking opens Drawer)
+- **TaskFilter** — status/owner/sort pill filter bar
+- **VendorCard** — vendor summary card (clicking opens VendorModal)
 
 ## Current phase
-Dashboard and Tasks are complete with hardcoded local state.
-Next step: Supabase auth, then wire real data to replace sample data.
+All core pages (Dashboard, Tasks, Vendors, Budget) are complete with hardcoded local state.
+Next step: wire Supabase auth and replace sample data with real database queries.
