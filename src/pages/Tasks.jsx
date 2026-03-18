@@ -1,11 +1,13 @@
 /**
  * Tasks — full task management page.
- * Manages task toggle state and filter state.
- * Passes filtered/sorted tasks to TaskCard and filter state to TaskFilter.
+ * Manages task state and filter state.
+ * Clicking a row or "+ Add Task" opens a Drawer with TaskForm for CRUD.
  */
 import { useState } from 'react'
 import TaskCard   from '../components/TaskCard'
 import TaskFilter from '../components/TaskFilter'
+import Drawer     from '../components/Drawer'
+import TaskForm   from '../components/TaskForm'
 
 const SAMPLE_TASKS = [
   { id:  1, title: 'Ask Matt to be Best Man',                       completed: false, dueDate: '2026-03-20', owner: 'Timothy', category: 'Admin',       priority: 'High'   },
@@ -69,7 +71,7 @@ function isOverdue(task) {
 function Tasks() {
   const [tasks,      setTasks]      = useState(SAMPLE_TASKS)
   const [filters,    setFilters]    = useState({ status: 'all', owner: 'all', sort: 'dueDate' })
-  const [expandedId, setExpandedId] = useState(null)
+  const [drawerTask, setDrawerTask] = useState(null)
 
   function handleToggle(id) {
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))
@@ -79,42 +81,36 @@ function Tasks() {
     setFilters(prev => ({ ...prev, [key]: value }))
   }
 
-  function handleExpand(id) {
-    if (expandedId === id) {
-      setExpandedId(null)
-      return
-    }
-    /* Discard any unsaved new task if expanding a different row */
-    if (expandedId < 0) setTasks(prev => prev.filter(t => t.id !== expandedId))
-    setExpandedId(id)
+  function handleRowClick(task) {
+    setDrawerTask(task)
+  }
+
+  function handleCloseDrawer() {
+    if (drawerTask?.id < 0) setTasks(prev => prev.filter(t => t.id !== drawerTask.id))
+    setDrawerTask(null)
   }
 
   function handleSave(updatedTask) {
     if (updatedTask.id < 0) {
       const newTask = { ...updatedTask, id: Date.now(), completed: false }
-      setTasks(prev => [...prev.filter(t => t.id !== updatedTask.id), newTask])
+      setTasks(prev => [...prev, newTask])
     } else {
       setTasks(prev => prev.map(t => t.id === updatedTask.id ? updatedTask : t))
     }
-    setExpandedId(null)
+    setDrawerTask(null)
   }
 
   function handleDelete(id) {
     setTasks(prev => prev.filter(t => t.id !== id))
-    setExpandedId(null)
-  }
-
-  function handleCancel() {
-    if (expandedId < 0) setTasks(prev => prev.filter(t => t.id !== expandedId))
-    setExpandedId(null)
+    setDrawerTask(null)
   }
 
   function handleAddTask() {
-    if (expandedId < 0) return
-    const tempId = -Date.now()
-    const newTask = { id: tempId, title: '', completed: false, dueDate: '', owner: 'Both', category: 'Admin', priority: 'Medium' }
-    setTasks(prev => [newTask, ...prev])
-    setExpandedId(tempId)
+    const newTask = {
+      id: -Date.now(), title: '', completed: false,
+      dueDate: '', owner: 'Both', category: 'Admin', priority: 'Medium',
+    }
+    setDrawerTask(newTask)
   }
 
   const completed = tasks.filter(t => t.completed).length
@@ -201,6 +197,7 @@ function Tasks() {
           border-radius: 16px;
           overflow: hidden;
           box-shadow: var(--shadow-lifted);
+          background: var(--ivory);
         }
 
         .tasks-page__empty {
@@ -260,17 +257,26 @@ function Tasks() {
                   key={task.id}
                   task={task}
                   onToggle={handleToggle}
-                  isExpanded={expandedId === task.id}
-                  onExpand={handleExpand}
-                  onSave={handleSave}
-                  onDelete={handleDelete}
-                  onCancel={handleCancel}
+                  onEdit={handleRowClick}
                 />
               ))
             : <p className="tasks-page__empty">No tasks match the current filters.</p>
           }
         </div>
       </div>
+
+      <Drawer
+        isOpen={drawerTask !== null}
+        onClose={handleCloseDrawer}
+        title={drawerTask?.id < 0 ? 'Add Task' : 'Edit Task'}
+      >
+        <TaskForm
+          task={drawerTask}
+          onSave={handleSave}
+          onDelete={handleDelete}
+          onClose={handleCloseDrawer}
+        />
+      </Drawer>
     </>
   )
 }

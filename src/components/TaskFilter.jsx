@@ -42,7 +42,7 @@ function TaskFilter({ filters, onChange }) {
           flex-wrap: wrap;
           gap: 1rem;
           padding: 1rem;
-          background: var(--ivory-dark);
+          background: rgba(249, 232, 220, 0.6);
           border-bottom: 1px solid var(--border);
         }
 
@@ -70,7 +70,7 @@ function TaskFilter({ filters, onChange }) {
           padding: 0.25rem 0.75rem;
           border-radius: 999px;
           border: 1px solid var(--border);
-          background: var(--ivory);
+          background: var(--ivory-dark);
           color: var(--text);
           cursor: pointer;
           transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
