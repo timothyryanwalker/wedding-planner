@@ -9,63 +9,7 @@ import TaskFilter  from '../components/TaskFilter'
 import Drawer      from '../components/Drawer'
 import TaskForm    from '../components/TaskForm'
 import PageHeader  from '../components/PageHeader'
-
-const SAMPLE_TASKS = [
-  { id:  1, title: 'Ask Matt to be Best Man',                       completed: false, dueDate: '2026-03-20', owner: 'Timothy', category: 'Admin',       priority: 'High'   },
-  { id:  2, title: 'Sign photobooth contract + send first payment', completed: false, dueDate: '2026-03-20', owner: 'Both',    category: 'Admin',       priority: 'High'   },
-  { id:  3, title: 'Book engagement photoshoot',                    completed: false, dueDate: '2026-04-01', owner: 'Both',    category: 'Photography', priority: 'High'   },
-  { id:  4, title: 'Source photographer',                           completed: false, dueDate: '2026-04-01', owner: 'Both',    category: 'Photography', priority: 'High'   },
-  { id:  5, title: 'Source videographer',                           completed: false, dueDate: '2026-05-01', owner: 'Both',    category: 'Photography', priority: 'Medium' },
-  { id:  6, title: 'Figure out who is marrying us',                 completed: false, dueDate: '2026-04-15', owner: 'Both',    category: 'Admin',       priority: 'High'   },
-  { id:  7, title: 'Book remaining NYC dress appointments',         completed: false, dueDate: '2026-04-01', owner: 'Taylor',  category: 'Attire',      priority: 'High'   },
-  { id:  8, title: 'Ceremony dress fitting/tailoring',              completed: false, dueDate: '2027-01-01', owner: 'Taylor',  category: 'Attire',      priority: 'Medium' },
-  { id:  9, title: 'Reception dress fitting/tailoring',             completed: false, dueDate: '2027-02-01', owner: 'Taylor',  category: 'Attire',      priority: 'Medium' },
-  { id: 10, title: 'Hair/makeup trial',                             completed: false, dueDate: '2027-03-01', owner: 'Taylor',  category: 'Attire',      priority: 'Medium' },
-  { id: 11, title: 'Spray tan',                                     completed: false, dueDate: '2027-05-25', owner: 'Taylor',  category: 'Attire',      priority: 'Low'    },
-  { id: 12, title: 'Manicure/pedicure',                             completed: false, dueDate: '2027-05-28', owner: 'Taylor',  category: 'Attire',      priority: 'Low'    },
-  { id: 13, title: 'Tuxedo fitting/tailoring',                      completed: false, dueDate: '2027-01-01', owner: 'Timothy', category: 'Attire',      priority: 'Medium' },
-  { id: 14, title: 'Haircut',                                       completed: false, dueDate: '2027-05-28', owner: 'Timothy', category: 'Attire',      priority: 'Low'    },
-  { id: 15, title: 'Design website',                                completed: false, dueDate: '2026-06-01', owner: 'Both',    category: 'Stationery',  priority: 'Medium' },
-  { id: 16, title: 'Design invitations',                            completed: false, dueDate: '2026-07-01', owner: 'Taylor',  category: 'Stationery',  priority: 'Medium' },
-  { id: 17, title: 'Design programmes',                             completed: false, dueDate: '2027-02-01', owner: 'Taylor',  category: 'Stationery',  priority: 'Low'    },
-  { id: 18, title: 'Build registry',                                completed: false, dueDate: '2026-05-01', owner: 'Both',    category: 'Admin',       priority: 'Medium' },
-  { id: 19, title: 'Purchase website domain',                       completed: false, dueDate: '2026-04-01', owner: 'Both',    category: 'Stationery',  priority: 'Medium' },
-  { id: 20, title: 'Schedule photographer Zoom call',               completed: false, dueDate: '2026-03-25', owner: 'Both',    category: 'Photography', priority: 'High'   },
-  { id: 21, title: 'Work on family shot lists',                     completed: false, dueDate: '2027-03-01', owner: 'Both',    category: 'Photography', priority: 'Low'    },
-  { id: 22, title: 'Schedule venue tasting',                        completed: false, dueDate: '2026-06-01', owner: 'Both',    category: 'Venue',       priority: 'High'   },
-  { id: 23, title: 'Determine officiant',                           completed: false, dueDate: '2026-05-01', owner: 'Both',    category: 'Admin',       priority: 'High'   },
-  { id: 24, title: 'Write vows',                                    completed: false, dueDate: '2027-04-01', owner: 'Both',    category: 'Admin',       priority: 'Medium' },
-  { id: 25, title: 'Select ceremony readings',                      completed: false, dueDate: '2027-03-01', owner: 'Both',    category: 'Admin',       priority: 'Low'    },
-  { id: 26, title: 'Select walk in/out music',                      completed: false, dueDate: '2027-03-01', owner: 'Both',    category: 'Music',       priority: 'Low'    },
-  { id: 27, title: 'Book DJ',                                       completed: false, dueDate: '2026-06-01', owner: 'Timothy', category: 'Music',       priority: 'High'   },
-  { id: 28, title: 'Finalize florals vendor',                       completed: false, dueDate: '2026-04-01', owner: 'Both',    category: 'Flowers',     priority: 'High'   },
-  { id: 29, title: 'Design menus',                                  completed: false, dueDate: '2027-03-01', owner: 'Taylor',  category: 'Stationery',  priority: 'Low'    },
-  { id: 30, title: 'Print menus',                                   completed: false, dueDate: '2027-04-15', owner: 'Taylor',  category: 'Stationery',  priority: 'Low'    },
-  { id: 31, title: 'Select first dance song',                       completed: false, dueDate: '2026-08-01', owner: 'Both',    category: 'Music',       priority: 'Medium' },
-  { id: 32, title: 'Book honeymoon flights',                        completed: false, dueDate: '2026-06-01', owner: 'Timothy', category: 'Honeymoon',   priority: 'High'   },
-  { id: 33, title: 'Book honeymoon hotels/AirBnBs',                 completed: false, dueDate: '2026-06-01', owner: 'Both',    category: 'Honeymoon',   priority: 'High'   },
-  { id: 34, title: 'Book honeymoon transportation',                 completed: false, dueDate: '2026-08-01', owner: 'Both',    category: 'Honeymoon',   priority: 'Medium' },
-  { id: 35, title: 'Sort phone plan for honeymoon',                 completed: false, dueDate: '2027-04-01', owner: 'Both',    category: 'Honeymoon',   priority: 'Low'    },
-  { id: 36, title: 'First dance lessons',                           completed: false, dueDate: '2026-09-01', owner: 'Both',    category: 'Admin',       priority: 'Medium' },
-  { id: 37, title: 'Research rehearsal dinner venues',              completed: false, dueDate: '2026-07-01', owner: 'Both',    category: 'Venue',       priority: 'Medium' },
-  { id: 38, title: 'Ask Karleigh to be MOH',                        completed: true,  dueDate: '2026-01-01', owner: 'Taylor',  category: 'Admin',       priority: 'High'   },
-  { id: 39, title: 'Call hotels for wedding blocks',                completed: true,  dueDate: '2026-01-01', owner: 'Both',    category: 'Admin',       priority: 'High'   },
-  { id: 40, title: 'Source HMU artist',                             completed: true,  dueDate: '2026-01-01', owner: 'Taylor',  category: 'Attire',      priority: 'High'   },
-  { id: 41, title: 'Lovely Bride appointment (Philly)',             completed: true,  dueDate: '2026-02-01', owner: 'Taylor',  category: 'Attire',      priority: 'Medium' },
-  { id: 42, title: 'Kinfolk appointment (Philly)',                  completed: true,  dueDate: '2026-02-01', owner: 'Taylor',  category: 'Attire',      priority: 'Medium' },
-  { id: 43, title: 'Anthropologie appointment (Philly)',            completed: true,  dueDate: '2026-02-01', owner: 'Taylor',  category: 'Attire',      priority: 'Medium' },
-  { id: 44, title: 'Lovely Bride appointment (NYC)',                completed: true,  dueDate: '2026-02-15', owner: 'Taylor',  category: 'Attire',      priority: 'Medium' },
-  { id: 45, title: 'Sarah Seven appointment (NYC)',                 completed: true,  dueDate: '2026-02-15', owner: 'Taylor',  category: 'Attire',      priority: 'Medium' },
-  { id: 46, title: 'Pay Salt Florist deposit',                      completed: true,  dueDate: '2026-01-29', owner: 'Both',    category: 'Flowers',     priority: 'High'   },
-  { id: 47, title: 'Pay Air Hair & Makeup deposit',                 completed: true,  dueDate: '2026-01-29', owner: 'Taylor',  category: 'Attire',      priority: 'High'   },
-]
-
-const GOALS = [
-  { id: 1, title: 'Lock in all vendors' },
-  { id: 2, title: 'Finalise the look' },
-  { id: 3, title: 'Sort the guest list' },
-  { id: 4, title: 'Plan the honeymoon' },
-]
+import { useAppData } from '../context/AppDataContext'
 
 const TODAY = new Date()
 TODAY.setHours(0, 0, 0, 0)
@@ -77,12 +21,14 @@ function isOverdue(task) {
 }
 
 function Tasks() {
-  const [tasks,      setTasks]      = useState(SAMPLE_TASKS)
+  const { tasks, goals, loading, addTask, updateTask, deleteTask } = useAppData()
   const [filters,    setFilters]    = useState({ status: 'all', owner: 'all', sort: 'dueDate' })
   const [drawerTask, setDrawerTask] = useState(null)
 
-  function handleToggle(id) {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: !t.completed } : t))
+  async function handleToggle(id) {
+    const task = tasks.find(t => t.id === id)
+    if (!task) return
+    try { await updateTask({ ...task, completed: !task.completed }) } catch (e) { console.error(e) }
   }
 
   function handleFilterChange(key, value) {
@@ -94,23 +40,25 @@ function Tasks() {
   }
 
   function handleCloseDrawer() {
-    if (drawerTask?.id < 0) setTasks(prev => prev.filter(t => t.id !== drawerTask.id))
     setDrawerTask(null)
   }
 
-  function handleSave(updatedTask) {
-    if (updatedTask.id < 0) {
-      const newTask = { ...updatedTask, id: Date.now(), completed: false }
-      setTasks(prev => [...prev, newTask])
-    } else {
-      setTasks(prev => prev.map(t => t.id === updatedTask.id ? updatedTask : t))
-    }
-    setDrawerTask(null)
+  async function handleSave(formData) {
+    try {
+      if (drawerTask?.id < 0) {
+        await addTask(formData)
+      } else {
+        await updateTask({ ...drawerTask, ...formData })
+      }
+      setDrawerTask(null)
+    } catch (e) { console.error(e) }
   }
 
-  function handleDelete(id) {
-    setTasks(prev => prev.filter(t => t.id !== id))
-    setDrawerTask(null)
+  async function handleDelete(id) {
+    try {
+      await deleteTask(id)
+      setDrawerTask(null)
+    } catch (e) { console.error(e) }
   }
 
   function handleAddTask() {
@@ -120,6 +68,8 @@ function Tasks() {
     }
     setDrawerTask(newTask)
   }
+
+  if (loading) return <div className="tasks-loading">Loading...</div>
 
   const completed = tasks.filter(t => t.completed).length
   const total     = tasks.length
@@ -235,7 +185,7 @@ function Tasks() {
           onSave={handleSave}
           onDelete={handleDelete}
           onClose={handleCloseDrawer}
-          goals={GOALS}
+          goals={goals}
         />
       </Drawer>
     </>

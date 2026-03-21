@@ -13,6 +13,7 @@ import Vendors         from './pages/Vendors'
 import Budget          from './pages/Budget'
 import Login           from './pages/Login'
 import Goals           from './pages/Goals'
+import AppDataProvider from './context/AppDataContext'
 const Guests  = () => <p style={{ padding: '2rem', fontFamily: 'var(--font-body)' }}>Guests — coming soon</p>
 
 /* Layout rendered inside protected routes — includes NavBar and main content area */
@@ -28,6 +29,7 @@ const AppLayout = () => (
 function App() {
   return (
     <AuthProvider>
+      <AppDataProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
@@ -43,6 +45,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </AppDataProvider>
     </AuthProvider>
   )
 }
