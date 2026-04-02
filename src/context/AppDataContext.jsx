@@ -1,5 +1,5 @@
 /**
- * AppDataContext — fetches and manages goals and tasks from Supabase.
+ * AppDataContext — fetches and manages goals, tasks, and vendors from Supabase.
  * Wrap the app in <AppDataProvider> and access data via the useAppData() hook.
  * All mutations update Supabase first, then sync local state on success.
  */
@@ -36,12 +36,49 @@ function toTask(row) {
   }
 }
 
+/* Map a raw Supabase vendor_payments row to camelCase for the frontend */
+function toPayment(row) {
+  return {
+    id:        row.id,
+    vendorId:  row.vendor_id,
+    label:     row.label,
+    amount:    row.amount,
+    dueDate:   row.due_date,
+    paid:      row.paid,
+    createdAt: row.created_at,
+  }
+}
+
+/* Map a raw Supabase vendors row to camelCase, attaching pre-grouped payments */
+function toVendor(row, payments = []) {
+  return {
+    id:             row.id,
+    userId:         row.user_id,
+    name:           row.name,
+    category:       row.category,
+    status:         row.status,
+    contactName:    row.contact_name,
+    contactEmail:   row.contact_email,
+    contactPhone:   row.contact_phone,
+    instagram:      row.instagram,
+    website:        row.website,
+    notes:          row.notes,
+    packages:       row.packages,
+    pricing:        row.pricing,
+    source:         row.source,
+    gmailThreadId:  row.gmail_thread_id,
+    createdAt:      row.created_at,
+    payments,
+  }
+}
+
 export function AppDataProvider({ children }) {
   const { session } = useAuth()
   const user = session?.user ?? null
 
   const [goals,   setGoals]   = useState([])
   const [tasks,   setTasks]   = useState([])
+  const [vendors, setVendors] = useState([])
   const [loading, setLoading] = useState(true)
 
   /* Fetch goals and tasks whenever the logged-in user changes */
@@ -49,6 +86,7 @@ export function AppDataProvider({ children }) {
     if (!user) {
       setGoals([])
       setTasks([])
+      setVendors([])
       setLoading(false)
       return
     }
@@ -56,21 +94,28 @@ export function AppDataProvider({ children }) {
     async function fetchData() {
       setLoading(true)
 
-      const [{ data: goalsData }, { data: tasksData }] = await Promise.all([
-        supabase
-          .from('goals')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: true }),
-        supabase
-          .from('tasks')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: true }),
+      const [
+        { data: goalsData },
+        { data: tasksData },
+        { data: vendorsData },
+        { data: paymentsData },
+      ] = await Promise.all([
+        supabase.from('goals').select('*').eq('user_id', user.id).order('created_at', { ascending: true }),
+        supabase.from('tasks').select('*').eq('user_id', user.id).order('created_at', { ascending: true }),
+        supabase.from('vendors').select('*').eq('user_id', user.id).order('created_at', { ascending: true }),
+        supabase.from('vendor_payments').select('*').order('created_at', { ascending: true }),
       ])
+
+      /* Group payments by vendor_id for O(1) lookup when attaching to vendors */
+      const paymentsByVendor = (paymentsData ?? []).reduce((map, row) => {
+        if (!map[row.vendor_id]) map[row.vendor_id] = []
+        map[row.vendor_id].push(toPayment(row))
+        return map
+      }, {})
 
       setGoals((goalsData ?? []).map(toGoal))
       setTasks((tasksData ?? []).map(toTask))
+      setVendors((vendorsData ?? []).map(row => toVendor(row, paymentsByVendor[row.id] ?? [])))
       setLoading(false)
     }
 
@@ -107,6 +152,68 @@ export function AppDataProvider({ children }) {
       .eq('id', id)
     if (error) throw error
     setGoals(prev => prev.filter(g => g.id !== id))
+  }
+
+  /* ── Vendor handlers ────────────────────────────────────────── */
+
+  async function addVendor({ name, category, status, contactName, contactEmail, contactPhone, instagram, website, notes, packages, pricing, source, gmailThreadId }) {
+    const { data, error } = await supabase
+      .from('vendors')
+      .insert({
+        user_id:       user.id,
+        name,
+        category,
+        status,
+        contact_name:  contactName  ?? null,
+        contact_email: contactEmail ?? null,
+        contact_phone: contactPhone ?? null,
+        instagram:     instagram    ?? null,
+        website:       website      ?? null,
+        notes:         notes        ?? null,
+        packages:      packages     ?? null,
+        pricing:       pricing      ?? null,
+        source:        source       ?? null,
+        gmail_thread_id: gmailThreadId ?? null,
+      })
+      .select()
+      .single()
+    if (error) throw error
+    setVendors(prev => [...prev, toVendor(data, [])])
+  }
+
+  async function updateVendor(vendor) {
+    const { data, error } = await supabase
+      .from('vendors')
+      .update({
+        name:          vendor.name,
+        category:      vendor.category,
+        status:        vendor.status,
+        contact_name:  vendor.contactName  ?? null,
+        contact_email: vendor.contactEmail ?? null,
+        contact_phone: vendor.contactPhone ?? null,
+        instagram:     vendor.instagram    ?? null,
+        website:       vendor.website      ?? null,
+        notes:         vendor.notes        ?? null,
+        packages:      vendor.packages     ?? null,
+        pricing:       vendor.pricing      ?? null,
+        source:        vendor.source       ?? null,
+        gmail_thread_id: vendor.gmailThreadId ?? null,
+      })
+      .eq('id', vendor.id)
+      .select()
+      .single()
+    if (error) throw error
+    /* Preserve existing payments in local state — payments are managed separately */
+    setVendors(prev => prev.map(v => v.id === vendor.id ? toVendor(data, v.payments) : v))
+  }
+
+  async function deleteVendor(id) {
+    const { error } = await supabase
+      .from('vendors')
+      .delete()
+      .eq('id', id)
+    if (error) throw error
+    setVendors(prev => prev.filter(v => v.id !== id))
   }
 
   /* ── Task handlers ──────────────────────────────────────────── */
@@ -159,9 +266,10 @@ export function AppDataProvider({ children }) {
   }
 
   const value = {
-    goals, tasks, loading,
+    goals, tasks, vendors, loading,
     addGoal, updateGoal, deleteGoal,
     addTask, updateTask, deleteTask,
+    addVendor, updateVendor, deleteVendor,
   }
 
   return (

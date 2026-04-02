@@ -10,6 +10,10 @@ Built web-first (React + Vite), with iOS (Expo) planned for the future.
 - Routing: react-router-dom
 - Hosting: Netlify (planned)
 
+DOCUMENTATION:
+When answering questions about React, Vite, Tailwind, or Supabase, 
+always use context7 to fetch current docs before responding.
+
 ## Aesthetic
 Warm romance palette. Thin-line icons. Gentle fade animations. Never flat white backgrounds.
 
@@ -61,5 +65,12 @@ Tables in Supabase: users, tasks, vendors, goals, budget_items, guests
 - **VendorCard** — vendor summary card (clicking opens VendorModal)
 
 ## Current phase
-All core pages (Dashboard, Tasks, Vendors, Budget) are complete with hardcoded local state.
-Next step: wire Supabase auth and replace sample data with real database queries.
+Dashboard, Tasks, Goals are wired to Supabase with full CRUD.
+Vendors page is being wired to Supabase (in progress).
+Next step: complete vendor CRUD, then wire Budget page.
+
+### Supabase tables live
+- **goals** — full CRUD via AppDataContext
+- **tasks** — full CRUD via AppDataContext
+- **vendors** — migration created, CRUD being added to AppDataContext
+- **vendor_payments** — migration created, managed as sub-records of vendors

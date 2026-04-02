@@ -24,6 +24,8 @@ function VendorModal({ vendor, onSave, onDelete, onClose }) {
   const [instagram,    setInstagram]    = useState('')
   const [website,      setWebsite]      = useState('')
   const [notes,        setNotes]        = useState('')
+  const [packages,     setPackages]     = useState('')
+  const [pricing,      setPricing]      = useState('')
   const [payments,     setPayments]     = useState([])
 
   /* Reset all fields when a new vendor is opened */
@@ -38,13 +40,15 @@ function VendorModal({ vendor, onSave, onDelete, onClose }) {
       setInstagram(vendor.instagram ?? '')
       setWebsite(vendor.website     ?? '')
       setNotes(vendor.notes         ?? '')
+      setPackages(vendor.packages   ?? '')
+      setPricing(vendor.pricing     ?? '')
       setPayments(vendor.payments   ?? [])
     }
   }, [vendor])
 
   if (!vendor) return null
 
-  const isNew = vendor.id < 0
+  const isNew = typeof vendor.id === 'string' ? vendor.id.startsWith('-') : vendor.id < 0
 
   function handleSave() {
     if (!name.trim()) return
@@ -53,7 +57,7 @@ function VendorModal({ vendor, onSave, onDelete, onClose }) {
       name: name.trim(),
       category, status,
       contactName, contactEmail, contactPhone,
-      instagram, website, notes,
+      instagram, website, notes, packages, pricing,
       payments: payments.map(p => ({ ...p, amount: parseFloat(p.amount) || 0 })),
     })
   }
@@ -338,6 +342,25 @@ function VendorModal({ vendor, onSave, onDelete, onClose }) {
                 placeholder="Any notes about this vendor..."
                 value={notes}
                 onChange={e => setNotes(e.target.value)}
+                rows={3}
+              />
+            </div>
+
+            {/* Packages & Pricing */}
+            <div className="vendor-modal__section">
+              <span className="vendor-modal__section-label">Packages &amp; Pricing</span>
+              <textarea
+                className="vendor-modal__textarea"
+                placeholder="Packages offered..."
+                value={packages}
+                onChange={e => setPackages(e.target.value)}
+                rows={3}
+              />
+              <textarea
+                className="vendor-modal__textarea"
+                placeholder="Pricing details..."
+                value={pricing}
+                onChange={e => setPricing(e.target.value)}
                 rows={3}
               />
             </div>

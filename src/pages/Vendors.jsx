@@ -7,6 +7,7 @@ import { useState, useRef, useEffect } from 'react'
 import VendorCard  from '../components/VendorCard'
 import VendorModal from '../components/VendorModal'
 import PageHeader  from '../components/PageHeader'
+import { useAppData } from '../context/AppDataContext'
 
 const CATEGORY_OPTIONS = [
   'Florist', 'Hair & Makeup', 'Photography', 'Videography',
@@ -15,66 +16,12 @@ const CATEGORY_OPTIONS = [
 
 const STATUS_OPTIONS = ['Researching', 'Contacted', 'Booked', 'Paid in Full']
 
-const SAMPLE_VENDORS = [
-  {
-    id: 1, name: 'Salt Florist', category: 'Florist', status: 'Booked',
-    contactName: 'Megan Kyle', contactEmail: 'meg.saltfloral@gmail.com',
-    contactPhone: '(215) 490-2276', instagram: '@saltfloral', website: '', notes: '',
-    payments: [
-      { id: 101, label: 'Deposit', amount: 2391.34, dueDate: '2026-01-29', paid: true  },
-      { id: 102, label: 'Final',   amount: 7174,    dueDate: '2027-04-30', paid: false },
-    ],
-  },
-  {
-    id: 2, name: 'Air Hair & Makeup', category: 'Hair & Makeup', status: 'Booked',
-    contactName: 'Sofiia Kozhushko', contactEmail: 'airhairandmakeup@gmail.com',
-    contactPhone: '', instagram: '@airhairandmakeup', website: '', notes: '',
-    payments: [
-      { id: 201, label: 'Deposit',        amount: 350,  dueDate: '2026-01-29', paid: true  },
-      { id: 202, label: 'Trial',          amount: 400,  dueDate: '',           paid: false },
-      { id: 203, label: 'Bridal HMU',     amount: 700,  dueDate: '2027-05-20', paid: false },
-      { id: 204, label: 'Bridesmaid HMU', amount: 1050, dueDate: '2027-05-20', paid: false },
-    ],
-  },
-  {
-    id: 3, name: 'Classic Photobooth', category: 'Photobooth', status: 'Contacted',
-    contactName: 'Max', contactEmail: '', contactPhone: '',
-    instagram: '', website: 'classicphotobooth.net', notes: '',
-    payments: [],
-  },
-  {
-    id: 4, name: 'Parque at Ridley Creek', category: 'Venue', status: 'Booked',
-    contactName: '', contactEmail: '', contactPhone: '',
-    instagram: '', website: '', notes: '1023 Sycamore Mills Rd, Media PA 19073',
-    payments: [],
-  },
-  {
-    id: 5, name: 'TBD Photographer', category: 'Photography', status: 'Researching',
-    contactName: '', contactEmail: '', contactPhone: '',
-    instagram: '', website: '', notes: '', payments: [],
-  },
-  {
-    id: 6, name: 'TBD Videographer', category: 'Videography', status: 'Researching',
-    contactName: '', contactEmail: '', contactPhone: '',
-    instagram: '', website: '', notes: '', payments: [],
-  },
-  {
-    id: 7, name: 'TBD DJ', category: 'DJ', status: 'Researching',
-    contactName: '', contactEmail: '', contactPhone: '',
-    instagram: '', website: '', notes: '', payments: [],
-  },
-  {
-    id: 8, name: 'TBD Cake', category: 'Cake', status: 'Researching',
-    contactName: '', contactEmail: '', contactPhone: '',
-    instagram: '', website: '', notes: '', payments: [],
-  },
-]
 
 const fmtCurrency = amount =>
   new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(amount)
 
 function Vendors() {
-  const [vendors,       setVendors]       = useState(SAMPLE_VENDORS)
+  const { vendors, loading, addVendor, updateVendor, deleteVendor } = useAppData()
   const [filters,       setFilters]       = useState({ category: [], status: [] })
   const [modalVendor,   setModalVendor]   = useState(null)
   const [openDropdown,  setOpenDropdown]  = useState(null) // 'category' | 'status' | null
@@ -105,9 +52,11 @@ function Vendors() {
     setFilters(prev => ({ ...prev, [key]: [] }))
   }
 
+  if (loading) return <div className="vendors-loading">Loading...</div>
+
   function handleAddVendor() {
     setModalVendor({
-      id: -Date.now(), name: '', category: 'Other', status: 'Researching',
+      id: `-${Date.now()}`, name: '', category: 'Other', status: 'Researching',
       contactName: '', contactEmail: '', contactPhone: '',
       instagram: '', website: '', notes: '', payments: [],
     })
@@ -117,18 +66,22 @@ function Vendors() {
     setModalVendor(vendor)
   }
 
-  function handleSave(updatedVendor) {
-    if (updatedVendor.id < 0) {
-      setVendors(prev => [...prev, { ...updatedVendor, id: Date.now() }])
-    } else {
-      setVendors(prev => prev.map(v => v.id === updatedVendor.id ? updatedVendor : v))
-    }
-    setModalVendor(null)
+  async function handleSave(updatedVendor) {
+    try {
+      if (updatedVendor.id.toString().startsWith('-')) {
+        await addVendor(updatedVendor)
+      } else {
+        await updateVendor(updatedVendor)
+      }
+      setModalVendor(null)
+    } catch (e) { console.error(e) }
   }
 
-  function handleDelete(id) {
-    setVendors(prev => prev.filter(v => v.id !== id))
-    setModalVendor(null)
+  async function handleDelete(id) {
+    try {
+      await deleteVendor(id)
+      setModalVendor(null)
+    } catch (e) { console.error(e) }
   }
 
   function handleCloseModal() {
